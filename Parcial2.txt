@@ -1,0 +1,56 @@
+Punto 1
+CLOUD SHELL y CLI
+
+credenciales:
+az aks get-credentials --resource-group GrupoPrueba --name prueba1
+
+Prueba:
+az aks list --output table
+
+Muestra nodos:
+kubectl get nodes 
+
+
+Punto 3:
+nano nginx-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+kubectl apply -f nginx-deployment.yaml
+
+nano nginx-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+kubectl apply -f nginx-service.yaml
+
+
